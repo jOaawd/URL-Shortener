@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Shortener</title>
+    <title>TinyUrl Alt</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -46,38 +46,13 @@
 </head>
 <body>
     <div class="container">
-        <h1>Custom URL Shortener</h1>
-        <form id="shorten-form">
-            <input type="text" id="long-url" placeholder="Enter the long URL" required>
-            <input type="text" id="custom-alias" placeholder="Enter a custom alias (optional)">
+        <h1>Shorten URL :></h1>
+        <form action="/shorten" method="POST">
+            <input type="text" name="longUrl" placeholder="Enter the long URL" required>
+            <input type="text" name="customAlias" placeholder="Enter a custom alias (optional)">
             <button type="submit">Shorten URL</button>
         </form>
         <div class="output" id="output"></div>
     </div>
-    <script>
-        document.getElementById('shorten-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-
-            const longUrl = document.getElementById('long-url').value;
-            const customAlias = document.getElementById('custom-alias').value;
-
-            const response = await fetch('/shorten', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ longUrl, customAlias })
-            });
-
-            const result = await response.json();
-            const output = document.getElementById('output');
-
-            if (result.success) {
-                output.innerHTML = `Shortened URL: <a href="${result.shortUrl}" target="_blank">${result.shortUrl}</a>`;
-            } else {
-                output.textContent = `Error: ${result.message}`;
-            }
-        });
-    </script>
 </body>
 </html>
