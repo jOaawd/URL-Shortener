@@ -26,7 +26,7 @@ Follow these steps to set up and run the project locally.
    cd URL-Shortener
 
 
-2, ** Instal Dep**
+2, **Install all the DEP**
 Go to package.json and install all dep by
 pip install (dep)
 
