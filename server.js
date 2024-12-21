@@ -2,13 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
+require('dotenv').config();
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-    secret: 'secretkey',  
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true
 }));
@@ -58,7 +59,6 @@ app.post('/shorten', (req, res) => {
     }
 
     urlMapping[shortAlias] = longUrl;
-
     req.session.urlCount++;
 
     const shortUrl = `${req.protocol}://${req.get('host')}/${shortAlias}`;
