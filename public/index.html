@@ -6,41 +6,107 @@
     <title>TinyUrl Alt</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            animation: fadeIn 1s ease-in-out;
+            background-color: #333;
         }
+
+        h1 {
+            color: #fff;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
         .container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
             max-width: 600px;
-            margin: 50px auto;
+            text-align: center;
+            animation: slideInUp 1s ease-out;
         }
-        input {
-            padding: 10px;
+
+        input[type="text"] {
+            padding: 12px;
             margin: 10px 0;
-            width: calc(100% - 22px);
+            width: calc(100% - 24px);
             font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
         }
+
+        input[type="text"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
         button {
-            padding: 10px 20px;
+            padding: 12px 25px;
             font-size: 16px;
-            background-color: #28a745;
+            background-color: #007bff;
             color: white;
             border: none;
+            border-radius: 8px;
             cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
+
         button:hover {
-            background-color: #218838;
+            background-color: #0056b3;
+            transform: scale(1.05);
         }
+
         .output {
             margin-top: 20px;
+            display: none;
+            padding: 15px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            border: 1px solid #ccc;
         }
+
         a {
             color: #007bff;
             text-decoration: none;
+            font-weight: bold;
         }
+
         a:hover {
             text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -51,8 +117,32 @@
             <input type="text" name="longUrl" placeholder="Enter the long URL" required>
             <input type="text" name="customAlias" placeholder="Enter a custom alias (optional)">
             <button type="submit">Shorten URL</button>
+           <div>
+            <strong>Made by FMODE Team</strong>
+</div>
         </form>
-        <div class="output" id="output"></div>
+        <div class="output" id="output">
+            <p><strong>Shortened URL:</strong></p>
+            <a href="#" target="_blank" id="shortUrl">Click here</a>
+        </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const backgroundUrl = 'https://picsum.photos/1920/1080/?random';
+            document.body.style.backgroundImage = `url(${backgroundUrl})`;
+        });
+
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const longUrl = document.querySelector('input[name="longUrl"]').value;
+            const customAlias = document.querySelector('input[name="customAlias"]').value;
+
+            const shortUrl = `https://tiny.url/${customAlias || 'custom'}`
+            document.getElementById('output').style.display = 'block';
+            document.getElementById('shortUrl').href = shortUrl;
+            document.getElementById('shortUrl').textContent = shortUrl;
+        });
+    </script>
 </body>
 </html>
