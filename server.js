@@ -1,10 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const session = require('express-session');
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+    secret: 'secretkey',  
+    resave: false,
+    saveUninitialized: true
+}));
 
 const urlMapping = {};
 
@@ -29,6 +36,14 @@ app.post('/shorten', (req, res) => {
         return res.status(400).send('Long URL is required.');
     }
 
+    if (!req.session.urlCount) {
+        req.session.urlCount = 0;
+    }
+
+    if (req.session.urlCount >= 5) {
+        return res.status(400).send('You have reached the limit of 5 shortened links.');
+    }
+
     let shortAlias;
     if (customAlias) {
         if (urlMapping[customAlias]) {
@@ -43,6 +58,9 @@ app.post('/shorten', (req, res) => {
     }
 
     urlMapping[shortAlias] = longUrl;
+
+    req.session.urlCount++;
+
     const shortUrl = `${req.protocol}://${req.get('host')}/${shortAlias}`;
 
     res.send(`Shortened URL: <a href="${shortUrl}" target="_blank">${shortUrl}</a>`);
