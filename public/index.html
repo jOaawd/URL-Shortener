@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TinyUrl Alt</title>
+    <title>Shorten URL</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -112,14 +112,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>Shorten URL :></h1>
-        <form action="/shorten" method="POST">
+        <h1>Shorten URL</h1>
+        <form id="shortenForm">
             <input type="text" name="longUrl" placeholder="Enter the long URL" required>
             <input type="text" name="customAlias" placeholder="Enter a custom alias (optional)">
             <button type="submit">Shorten URL</button>
-           <div>
-            <strong>Made by FMODE Team</strong>
-</div>
+            <div>
+                <strong>Made by FMODE Team</strong>
+            </div>
         </form>
         <div class="output" id="output">
             <p><strong>Shortened URL:</strong></p>
@@ -132,16 +132,33 @@
             document.body.style.backgroundImage = `url(${backgroundUrl})`;
         });
 
-        const form = document.querySelector('form');
+        const form = document.querySelector('#shortenForm');
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             const longUrl = document.querySelector('input[name="longUrl"]').value;
             const customAlias = document.querySelector('input[name="customAlias"]').value;
 
-            const shortUrl = `https://tiny.url/${customAlias || 'custom'}`
-            document.getElementById('output').style.display = 'block';
-            document.getElementById('shortUrl').href = shortUrl;
-            document.getElementById('shortUrl').textContent = shortUrl;
+            const data = {
+                longUrl: longUrl,
+                customAlias: customAlias
+            };
+
+            fetch('/shorten', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(data)
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('output').style.display = 'block';
+                document.getElementById('shortUrl').href = data.match(/href="([^"]+)"/)[1];
+                document.getElementById('shortUrl').textContent = data.match(/href="([^"]+)"/)[1];
+            })
+            .catch(error => {
+                alert('Error: ' + error.message);
+            });
         });
     </script>
 </body>
