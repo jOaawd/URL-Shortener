@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shorten URL</title>
+    <title>URL Shortner</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -13,99 +13,120 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-size: cover;
-            background-position: center;
+            background: url('https://picsum.photos/1920/1080/?random') no-repeat center center/cover;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            backdrop-filter: blur(10px);
             animation: fadeIn 1s ease-in-out;
-            background-color: #333;
         }
 
         h1 {
             color: #fff;
-            font-size: 2.5em;
-            margin-bottom: 30px;
+            font-size: 2em;
+            margin-bottom: 20px;
             font-weight: bold;
             letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        .container {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: 100%;
-            max-width: 600px;
-            text-align: center;
-            animation: slideInUp 1s ease-out;
         }
 
         input[type="text"] {
+            width: 90%;
             padding: 12px;
             margin: 10px 0;
-            width: calc(100% - 24px);
             font-size: 16px;
-            border: 1px solid #ddd;
+            border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 8px;
             outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
             transition: all 0.3s ease;
         }
 
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
         input[type="text"]:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            border-color: #00d4ff;
+            box-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
         }
 
         button {
-            padding: 12px 25px;
+            width: 90%;
+            padding: 12px;
             font-size: 16px;
-            background-color: #007bff;
+            background: linear-gradient(135deg, #00d4ff, #007bff);
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: all 0.3s ease;
+            margin-top: 10px;
         }
 
         button:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
         }
 
         .output {
             margin-top: 20px;
-            display: none;
             padding: 15px;
-            background-color: #f1f1f1;
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 8px;
-            border: 1px solid #ccc;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            display: none;
+            width: 90%;
         }
 
-        a {
-            color: #007bff;
+        .output a {
+            color: #00d4ff;
             text-decoration: none;
             font-weight: bold;
         }
 
-        a:hover {
+        .output a:hover {
             text-decoration: underline;
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
+                transform: scale(0.95);
             }
             to {
                 opacity: 1;
-            }
-        }
-
-        @keyframes slideInUp {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
+                transform: scale(1);
             }
         }
     </style>
@@ -116,22 +137,20 @@
         <form id="shortenForm">
             <input type="text" name="longUrl" placeholder="Enter the long URL" required>
             <input type="text" name="customAlias" placeholder="Enter a custom alias (optional)">
-            <button type="submit">Shorten URL :> </button>
+            <button type="submit">Shorten URL</button>
             <div>
                 <strong>Made by FMODE Team</strong>
+                <a href="https://github.com/jOaawd/URL-Shortener">Open-Sauce</a>
+
             </div>
         </form>
         <div class="output" id="output">
-            <p><strong>Here ya go :> URL:</strong></p>
+            <p><strong>Your shortened URL:</strong></p>
             <a href="#" target="_blank" id="shortUrl">Click here</a>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const backgroundUrl = 'https://picsum.photos/1920/1080/?random';
-            document.body.style.backgroundImage = `url(${backgroundUrl})`;
-        });
 
+    <script>
         const form = document.querySelector('#shortenForm');
         form.addEventListener('submit', function(e) {
             e.preventDefault();
